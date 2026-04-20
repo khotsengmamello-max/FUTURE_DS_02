@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Analysis Dashboard | Task 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0d0d0f;
+            color: #e5e5e5;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f5a623, #ffc04a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(245, 166, 35, 0.15);
+            color: #f5a623;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .kpi-card {
+            background: #16161e;
+            border: 1px solid #2a2a2e;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            border-color: #f5a623;
+            transform: translateY(-3px);
+        }
+
+        .kpi-icon {
+            font-size: 2rem;
+            color: #f5a623;
+            margin-bottom: 0.8rem;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #f5a623;
+            margin-bottom: 0.3rem;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        /* Button Navigation */
+        .button-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background: #16161e;
+            border: 1px solid #2a2a2e;
+            color: #e5e5e5;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover, .btn.active {
+            background: #f5a623;
+            border-color: #f5a623;
+            color: #0d0d0f;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: #16161e;
+            border: 1px solid #2a2a2e;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f5a623;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        /* Insights Section */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .insight-card {
+            background: #16161e;
+            border: 1px solid #2a2a2e;
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .insight-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f5a623;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insight-card p {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .recommendation {
+            background: rgba(245, 166, 35, 0.08);
+            border-left: 3px solid #f5a623;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0 0;
+            margin-top: 2rem;
+            border-top: 1px solid #2a2a2e;
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .kpi-value { font-size: 1.5rem; }
+            .button-grid { gap: 0.5rem; }
+            .btn { padding: 0.5rem 1rem; font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="badge">Task 2 | Future Interns</div>
+            <h1>Customer Retention & Churn Analysis</h1>
+            <p>Telco Customer Churn Dataset | Subscription Business Analytics</p>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="kpi-value" id="churn-rate">Loading...</div>
+                <div class="kpi-label">Overall Churn Rate</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                <div class="kpi-value" id="total-customers">Loading...</div>
+                <div class="kpi-label">Total Customers</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-user-minus"></i></div>
+                <div class="kpi-value" id="churned-customers">Loading...</div>
+                <div class="kpi-label">Customers Churned</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+                <div class="kpi-value" id="avg-tenure">Loading...</div>
+                <div class="kpi-label">Average Tenure (months)</div>
+            </div>
+        </div>
+
+        <!-- Button Navigation -->
+        <div class="button-grid">
+            <button class="btn active" onclick="showChart('pie')"> Churn Distribution</button>
+            <button class="btn" onclick="showChart('contract')"> By Contract Type</button>
+            <button class="btn" onclick="showChart('payment')"> By Payment Method</button>
+            <button class="btn" onclick="showChart('tenure')"> Tenure Distribution</button>
+            <button class="btn" onclick="showChart('charges')"> Monthly Charges</button>
+            <button class="btn" onclick="showChart('senior')"> Senior Citizens</button>
+        </div>
+
+        <!-- Chart Display Area -->
+        <div id="chart-area" class="chart-container">
+            <div class="chart-title">
+                <i class="fas fa-chart-pie"></i>
+                <span>Churn Distribution</span>
+            </div>
+            <img id="chart-image" src="1_churn_pie.png" alt="Churn Analysis Chart">
+        </div>
+
+        <!-- Insights & Recommendations -->
+        <div class="insights-grid">
+            <div class="insight-card">
+                <h3><i class="fas fa-chart-line"></i> Key Insights</h3>
+                <p>• <strong>26.5%</strong> overall churn rate — significant revenue loss</p>
+                <p>• <strong>Month-to-month</strong> contracts have <strong>42.7%</strong> churn (highest)</p>
+                <p>• <strong>Electronic check</strong> users churn at <strong>45.3%</strong></p>
+                <p>• <strong>First 12 months</strong> are critical — most churn happens early</p>
+                <p>• Higher monthly charges correlate with higher churn</p>
+            </div>
+            <div class="insight-card">
+                <h3><i class="fas fa-lightbulb"></i> Actionable Recommendations</h3>
+                <div class="recommendation">
+                    <strong>Offer contract incentives</strong><br>
+                    Encourage month-to-month customers to switch to 1-year or 2-year contracts with discounts.
+                </div>
+                <div class="recommendation">
+                    <strong>Improve payment experience</strong><br>
+                    Electronic check users have highest churn — offer auto-pay discounts.
+                </div>
+                <div class="recommendation">
+                    <strong> Focus on first 12 months</strong><br>
+                    Implement onboarding program and early engagement campaigns.
+                </div>
+                <div class="recommendation">
+                    <strong>Review pricing strategy</strong><br>
+                    Analyze high monthly charges — consider loyalty discounts.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Noliyolo Mamello Khotseng | Future Interns Data Science & Analytics Internship | Task 2: Customer Retention & Churn Analysis</p>
+        </div>
+    </div>
+
+    <script>
+        // Chart mapping
+        const charts = {
+            pie: { src: "1_churn_pie.png", title: "Churn Distribution", icon: "fa-chart-pie", desc: "Overall churn rate vs retained customers" },
+            contract: { src: "2_churn_by_contract.png", title: "Churn Rate by Contract Type", icon: "fa-file-contract", desc: "Month-to-month contracts have highest churn" },
+            payment: { src: "3_churn_by_payment.png", title: "Churn Rate by Payment Method", icon: "fa-credit-card", desc: "Electronic check users churn most" },
+            tenure: { src: "4_tenure_distribution.png", title: "Tenure Distribution", icon: "fa-calendar-alt", desc: "Churned vs Retained customers by tenure" },
+            charges: { src: "5_monthly_charges.png", title: "Monthly Charges Distribution", icon: "fa-dollar-sign", desc: "Higher charges = higher churn" },
+            senior: { src: "6_churn_by_senior.png", title: "Churn Rate by Senior Citizen Status", icon: "fa-user-check", desc: "Senior citizens churn less" }
+        };
+
+        // KPI Data (from your analysis)
+        const kpiData = {
+            churnRate: "26.5%",
+            totalCustomers: "7,043",
+            churnedCustomers: "1,869",
+            avgTenure: "32.4 months"
+        };
+
+        // Update KPI cards
+        document.getElementById('churn-rate').innerText = kpiData.churnRate;
+        document.getElementById('total-customers').innerText = kpiData.totalCustomers;
+        document.getElementById('churned-customers').innerText = kpiData.churnedCustomers;
+        document.getElementById('avg-tenure').innerText = kpiData.avgTenure;
+
+        // Function to show selected chart
+        function showChart(chartType) {
+            const chart = charts[chartType];
+            if (!chart) return;
+
+            // Update image
+            document.getElementById('chart-image').src = chart.src;
+            
+            // Update title and description
+            const titleDiv = document.querySelector('#chart-area .chart-title');
+            titleDiv.innerHTML = `<i class="fas ${chart.icon}"></i><span>${chart.title}</span>`;
+            
+            // Update active button styling
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Handle button clicks properly
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const chartType = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                const chart = charts[chartType];
+                if (chart) {
+                    document.getElementById('chart-image').src = chart.src;
+                    const titleDiv = document.querySelector('#chart-area .chart-title');
+                    titleDiv.innerHTML = `<i class="fas ${chart.icon}"></i><span>${chart.title}</span>`;
+                }
+                document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

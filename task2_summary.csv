@@ -1,0 +1,11 @@
+Metric,Value
+Overall Churn Rate,26.58%
+Total Customers,"7,032"
+Churned Customers,"1,869"
+Retained Customers,"5,163"
+Avg Tenure (All),32.4 months
+Avg Tenure (Churned),18.0 months
+Avg Tenure (Retained),37.7 months
+Avg Monthly Charges (All),$64.80
+Avg Monthly Charges (Churned),$74.44
+Avg Monthly Charges (Retained),$61.31
