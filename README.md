@@ -61,6 +61,4 @@ This project analyzes telecom customer churn using **Python** and **Power BI** t
 
 ---
 
-```bash
-pip install pandas matplotlib seaborn
-python task2_churn_analysis.py
+
