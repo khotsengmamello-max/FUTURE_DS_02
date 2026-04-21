@@ -19,6 +19,13 @@ This project analyzes telecom customer churn using **Python** and **Power BI** t
 - **Git/GitHub** – Version control  
 
 ---
+## 📸 Dashboard Preview
+
+<p align="center">
+  <img src="task2_churn_analysis.png" width="800"/>
+</p>
+
+----
 
 ## 📈 Key Insights
 
